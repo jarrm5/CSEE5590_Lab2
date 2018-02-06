@@ -7,7 +7,7 @@
     <title>BBC News App</title>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src='home.js'></script>
+    <script src='js/home.js'></script>
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="home.css">
@@ -15,27 +15,23 @@
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                Search a News Topic
-                <input  type="text" id="topic">
-            </div>
-            <div class="col-md-6">
-                <button id="submit">Search</button>
-            </div>
+        <div id="search-bar">
+            Search a News Topic
+            <input  type="text" id="inp-topic">
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                Search a News Source
-                <input type="text" id="source">
-                <button id="reset">Reset</button>
-            </div>
+        Popular News Sources
+        <div id="news-sources">
+                
         </div>
-            
-            
-            
-        
-        
+            <button id="btn-search">Search</button>
+            <button id="btn-reset">Reset</button>
     </div>
 </body>
 </html>
+
+<!--
+
+
+
+
+-->
