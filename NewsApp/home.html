@@ -9,8 +9,33 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src='js/home.js'></script>
 
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="home.css">
+    <style>
+
+        #search-bar,#news-sources,#buttons{
+            margin: 25px 50px;
+        }
+
+        #inp-topic{
+            margin-left: 30px;
+            width:500px;
+        }
+
+        #news-sources{
+            display: flex;
+            flex-wrap:wrap;
+        }
+
+        .news-outlet-container{
+            width: 200px;
+        }
+
+        .news-img-container img{
+            height: 50px;
+            width: 50px;
+        }
+    
+    
+    </style>
 
 </head>
 <body>
@@ -19,19 +44,14 @@
             Search a News Topic
             <input  type="text" id="inp-topic">
         </div>
-        Popular News Sources
         <div id="news-sources">
                 
         </div>
+        <div id="buttons">
             <button id="btn-search">Search</button>
             <button id="btn-reset">Reset</button>
+        </div>
     </div>
 </body>
 </html>
 
-<!--
-
-
-
-
--->
