@@ -1,15 +1,12 @@
 
-var URL = 'https://newsapi.org/v2/everything?' +
-          'language=en&' +
-          'from=2018-01-01&' +
-          'sortBy=relevancy&' +
-          'apiKey=4e7410f126044cd0807b3f536176ea48&';
 
 $(document).ready(function(){
 
     $('#news-sources').html(populate_news_outlets());
 
     $('#btn-search').on('click',function(){
+
+        $('#news-articles-container').html('');
 
         var topic = $('#inp-topic').val().trim();
 
@@ -19,41 +16,123 @@ $(document).ready(function(){
         });
 
         
-        if(topic !== ""){
-            URL += ('q=' + topic);
+        if((topic !== "") && (selected.length != 0)){
+            for(var i = 0; i < selected.length; i++){
+                get_articles_by_topic_and_source(topic,selected[i]);
+            }   
+        }
+        else{
+            if(topic !== ""){
+                get_articles_by_topic(topic);
+            }
+            else{
+                if(selected.length != 0){
+                    for(var i = 0; i < selected.length; i++){
+                        get_articles_by_sources(selected[i]);
+                    }    
+                }
+            }
         }
 
-        if(selected.length != 0){
-            if(topic !== ""){
-                URL += "&";
-            }
-            URL += ('sources=' + get_source_str(selected));
-        }    
-        console.log(Math.floor(20/3));
-        get_articles(URL);
+        //reset();
+        
+    //validation goes here
+
     });
 
     $('#btn-reset').on('click', function(){
-        $('#inp-topic').val('');
-
-        $.each($('input:checkbox:checked'),function(){
-            $(this).attr('checked',false);
-        });  
+        reset();
     });
 });
 
-function get_articles(theURL){
+function get_articles_by_sources(source){
     $.ajax({
       type: 'GET',
       dataType: 'json',
-      url:  theURL,
+      url:  'https://newsapi.org/v2/everything?' +
+            'language=en&' +
+            'sources=' + source + '&' +
+            'from=2018-01-01&' +
+            'sortBy=relevancy&' +
+            'pageSize=3&' +
+            'apiKey=4e7410f126044cd0807b3f536176ea48',
     }).done(function(data) {
+
         if(data['totalResults'] == 0){
             console.log('no results found');
         }
-        console.log(data);
+        else{
+            for(var i = 0; i < data['articles'].length; i++){
+                var test = get_articles_html(data["articles"][i]);
+                console.log(test);
+                $('#news-articles-container').append(get_articles_html(data["articles"][i]));
+            }
+        }
+
+        
+        //console.log(data);
     }).fail(function(data) {
-      console.log(data);
+        console.log(data);
+    });
+}
+
+function get_articles_by_topic(topic){
+    $.ajax({
+      type: 'GET',
+      dataType: 'json',
+      url:  'https://newsapi.org/v2/everything?' +
+            'language=en&' +
+            'q=' + topic + '&' +
+            'from=2018-01-01&' +
+            'sortBy=relevancy&' +
+            'pageSize=25&' +
+            'apiKey=4e7410f126044cd0807b3f536176ea48',
+    }).done(function(data) {
+
+        if(data['totalResults'] == 0){
+            console.log('no results found');
+        }
+        else{
+            for(var i = 0; i < data['articles'].length; i++){
+                //console.log(data["articles"][i]);
+                $('#news-articles-container').append(get_articles_html(data["articles"][i]));
+            }
+        }
+
+        //console.log(data);
+    }).fail(function(data) {
+        console.log(data);
+    });
+}
+
+function get_articles_by_topic_and_source(topic,source){
+    $.ajax({
+      type: 'GET',
+      dataType: 'json',
+      url:  'https://newsapi.org/v2/everything?' +
+            'language=en&' +
+            'q=' + topic + '&' +
+            'sources=' + source + '&' +
+            'from=2018-01-01&' +
+            'sortBy=relevancy&' +
+            'pageSize=3&' +
+            'apiKey=4e7410f126044cd0807b3f536176ea48',
+    }).done(function(data) {
+
+        if(data['totalResults'] == 0){
+            console.log('no results found');
+        }
+        else{
+            for(var i = 0; i < data['articles'].length; i++){
+                //console.log(data["articles"][i]);
+                $('#news-articles-container').append(get_articles_html(data["articles"][i]));
+            }
+        }
+
+
+        //console.log(data);
+    }).fail(function(data) {
+        console.log(data);
     });
 }
 
@@ -62,26 +141,36 @@ function populate_news_outlets(){
     var outlets = get_news_outlets();
     for(var i = 0; i < outlets.length; i++){
         html += '<div class=\'news-outlet-container\'>' + 
-                    '<div class=\'news-img-container\'>' + 
-                        '<img class=\'news-img-container\' src =\'img/' + outlets[i].img + '\'>' +
-                    '</div>' +
                     '<div class=\'inp-sources\'>' +
                         '<label class=\'checkbox-inline\'><input type=\'checkbox\' value=\'' + outlets[i].id  +'\'>' + outlets[i].name + '</label>' +
                     '</div>' + 
+                    '<div class=\'news-img-container\'>' + 
+                        '<img class=\'news-img-container\' src =\'img/' + outlets[i].img + '\'>' +
+                    '</div>' +
                 '</div>';
     }
     return html;
 }
 
-function get_source_str(sourceList){
-    var sourceStr = '';
-    for(var i = 0; i < sourceList.length; i++){
-        sourceStr += sourceList[i];
-        if(i < sourceList.length - 1){
-            sourceStr += ',';
-        }
-    }
-    return sourceStr;
+function get_articles_html(data){
+    return  '<div class=\'news-article\'>' + 
+                '<div class=\'news-article-img\'>' +
+                    '<span>' + data['source']['name'] + '</span>' +
+                    '<a href=\'' + data['url'] + '\'><img src=\'' + data['urlToImage'] + '\'></a>' +
+                '</div>' +
+                '<div class=\'news-article-content\'>' + 
+                    '<h2>' + data['title'] + '</h2>' + 
+                    '<p>' + data['description'] + '</p>' + 
+                '</div>' +
+            '</div>';
+}
+
+function reset(){
+    $('#inp-topic').val('');
+
+    $.each($('input:checkbox:checked'),function(){
+        $(this).attr('checked',false);
+    });  
 }
 
 function NewsOutlet(id,name,img){
