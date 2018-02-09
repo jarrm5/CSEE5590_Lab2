@@ -25,12 +25,11 @@ $(document).ready(function(){
             if(topic !== ""){
                 get_articles_by_topic(topic);
             }
-            else{
-                if(selected.length != 0){
-                    for(var i = 0; i < selected.length; i++){
-                        get_articles_by_sources(selected[i]);
-                    }    
-                }
+            
+            if(selected.length != 0){
+                for(var i = 0; i < selected.length; i++){
+                    get_articles_by_sources(selected[i]);
+                }    
             }
         }
 
@@ -49,10 +48,9 @@ function get_articles_by_sources(source){
     $.ajax({
       type: 'GET',
       dataType: 'json',
-      url:  'https://newsapi.org/v2/everything?' +
+      url:  'https://newsapi.org/v2/top-headlines?' +
             'language=en&' +
             'sources=' + source + '&' +
-            'from=2018-01-01&' +
             'sortBy=relevancy&' +
             'pageSize=3&' +
             'apiKey=4e7410f126044cd0807b3f536176ea48',
@@ -63,14 +61,10 @@ function get_articles_by_sources(source){
         }
         else{
             for(var i = 0; i < data['articles'].length; i++){
-                var test = get_articles_html(data["articles"][i]);
-                console.log(test);
                 $('#news-articles-container').append(get_articles_html(data["articles"][i]));
             }
         }
 
-        
-        //console.log(data);
     }).fail(function(data) {
         console.log(data);
     });
@@ -83,7 +77,6 @@ function get_articles_by_topic(topic){
       url:  'https://newsapi.org/v2/everything?' +
             'language=en&' +
             'q=' + topic + '&' +
-            'from=2018-01-01&' +
             'sortBy=relevancy&' +
             'pageSize=25&' +
             'apiKey=4e7410f126044cd0807b3f536176ea48',
@@ -94,12 +87,10 @@ function get_articles_by_topic(topic){
         }
         else{
             for(var i = 0; i < data['articles'].length; i++){
-                //console.log(data["articles"][i]);
                 $('#news-articles-container').append(get_articles_html(data["articles"][i]));
             }
         }
 
-        //console.log(data);
     }).fail(function(data) {
         console.log(data);
     });
@@ -113,7 +104,6 @@ function get_articles_by_topic_and_source(topic,source){
             'language=en&' +
             'q=' + topic + '&' +
             'sources=' + source + '&' +
-            'from=2018-01-01&' +
             'sortBy=relevancy&' +
             'pageSize=3&' +
             'apiKey=4e7410f126044cd0807b3f536176ea48',
@@ -124,13 +114,11 @@ function get_articles_by_topic_and_source(topic,source){
         }
         else{
             for(var i = 0; i < data['articles'].length; i++){
-                //console.log(data["articles"][i]);
                 $('#news-articles-container').append(get_articles_html(data["articles"][i]));
             }
         }
 
 
-        //console.log(data);
     }).fail(function(data) {
         console.log(data);
     });
@@ -145,7 +133,7 @@ function populate_news_outlets(){
                         '<label class=\'checkbox-inline\'><input type=\'checkbox\' value=\'' + outlets[i].id  +'\'>' + outlets[i].name + '</label>' +
                     '</div>' + 
                     '<div class=\'news-img-container\'>' + 
-                        '<img class=\'news-img-container\' src =\'img/' + outlets[i].img + '\'>' +
+                        '<img class=\'news-img-container\' src =\'../img/' + outlets[i].img + '\'>' +
                     '</div>' +
                 '</div>';
     }
@@ -153,13 +141,16 @@ function populate_news_outlets(){
 }
 
 function get_articles_html(data){
+
+    var date = new Date(data['publishedAt']);
+
     return  '<div class=\'news-article\'>' + 
                 '<div class=\'news-article-img\'>' +
-                    '<span>' + data['source']['name'] + '</span>' +
                     '<a href=\'' + data['url'] + '\'><img src=\'' + data['urlToImage'] + '\'></a>' +
                 '</div>' +
                 '<div class=\'news-article-content\'>' + 
                     '<h2>' + data['title'] + '</h2>' + 
+                    '<span>'+ data['source']['name']+ ' - ' + (date.getMonth()+1) + '/' + (date.getDay()+1) + '/' + date.getFullYear() + '</span>' +
                     '<p>' + data['description'] + '</p>' + 
                 '</div>' +
             '</div>';

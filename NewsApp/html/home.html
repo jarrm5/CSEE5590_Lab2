@@ -7,7 +7,7 @@
     <title>BBC News App</title>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src='js/home.js'></script>
+    <script src='../js/home.js'></script>
 
     <style>
 
@@ -33,6 +33,43 @@
         .news-img-container img{
             height: 50px;
             width: 50px;
+        }
+
+        .news-article{
+            height: 125px;
+            display: flex;
+            justify-content: flex-start;
+            margin: 10px;
+            background-color: bisque;
+            border-radius: 5px;
+            overflow: none;
+        }
+
+        .news-article-content{
+            
+            margin: 0px 0px 0px 15px;
+        }
+
+        .news-article-content span{
+            font-size: .7em;
+        }
+
+        .news-article-content h2, .news-article-content p{
+            margin: 0px;
+        }
+
+        .news-article-content h2{
+            margin-top:10px;
+        }
+
+        .news-article-content p{
+            margin-top: 20px;
+        }
+
+        .news-article-img a img{
+            width:125px;
+            height:100%;
+            
         }
     
     
