@@ -6,18 +6,37 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BBC News App</title>
 
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src='../js/home.js'></script>
 
     <style>
 
+        .title{
+            text-align:center;
+            background-color: bisque;
+            margin:25px 50px;
+            padding: 15px 0;
+            font-size:3em;
+            font-weight:bold;
+            font-family: 'Playfair Display', serif;
+        }
+
         #search-bar,#news-sources,#buttons{
             margin: 25px 50px;
         }
 
+        #search-bar{
+            text-align:center;
+            
+        }
+
         #inp-topic{
-            margin-left: 30px;
-            width:500px;
+            font-weight:italic;
+            width:75%;
+            font-family: 'Playfair Display', serif;
         }
 
         #news-sources{
@@ -28,6 +47,7 @@
         .news-outlet-container{
             margin: 10px;
             width: 200px;
+            text-align:center;
         }
 
         .news-img-container img{
@@ -46,12 +66,16 @@
         }
 
         .news-article-content{
-            
+            font-family: 'Playfair Display', serif;
             margin: 0px 0px 0px 15px;
         }
 
         .news-article-content span{
             font-size: .7em;
+        }
+
+        .news-article-content h2{
+            font-weight:bold;
         }
 
         .news-article-content h2, .news-article-content p{
@@ -71,6 +95,23 @@
             height:100%;
             
         }
+
+        .checkbox-inline{
+            font-family: 'Playfair Display', serif;
+        }
+
+        #buttons{
+            text-align:center;
+        }
+
+        #buttons input{
+            width: 120px;
+            font-weight:bold;
+        }
+
+        #buttons input:hover{
+            background-color: #F0C508;
+        }
     
     
     </style>
@@ -78,16 +119,20 @@
 </head>
 <body>
     <div class="container">
+        <div class="title">
+            BBC News App
+        </div>
         <div id="search-bar">
-            Search a News Topic
-            <input  type="text" id="inp-topic">
+            <input placeholder='Search a news topic..' type="text" id="inp-topic">
         </div>
         <div id="news-sources">
                 
         </div>
         <div id="buttons">
-            <button id="btn-search">Search</button>
-            <button id="btn-reset">Reset</button>
+            <input id="btn-search" class='btn btn-sm' type='submit' name='search' value='Search' />
+            <input id="btn-reset" class='btn btn-sm' type='submit' name='reset' value='Reset' />
+            <!--<button class='btn btn-sm' id="btn-search">Search</button>
+            <button class='btn btn-sm' id="btn-reset">Reset</button>-->
         </div>
         <div id="news-articles-container">
             
