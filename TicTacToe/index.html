@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html ng-app="tictactoeApp">
+<head>
+    <meta charset="utf-8">
+    <title>TicTacToe Game</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.min.js"></script>
+    <script src="game.js"></script>
+</head>
+<body ng-controller="controller">
+
+    <h1>{{game.TITLE}}</h1>
+
+    <table>
+        <tr ng-repeat="row in game.board">
+            <td ng-click="game.makeMove(game.board.indexOf(row),row.indexOf(s),'O')" 
+                ng-repeat="s in row" 
+                ng-class="[{O: 'player-O',X: 'player-X'}[s.char],{false: 'notOccupied'}[s.isOccupied]]">
+                {{s.char}}
+            </td>
+        </tr>
+    </table>
+
+    <h1>{{game.MESSAGE}}</h1>
+
+</body>
+</html>

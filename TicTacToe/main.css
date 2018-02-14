@@ -1,0 +1,38 @@
+body{
+    background: #201F1A;
+}
+
+h1{
+    color: white;
+    font-family: 'Passion One', cursive;
+    text-align:center;
+}
+
+table{
+    background-color:#201F1A;
+    width:450px;
+    height:450px;
+    margin:auto;
+}
+
+table tbody tr td{
+    border: 4px solid #201F1A;
+    background-color: #5D5F5D;
+    font-family: 'Passion One', cursive;
+    width: 137px;
+    height: 137px;
+    text-align:center;
+    font-size:100px;
+}
+
+.notOccupied:hover {
+    background-color:#FEEA98;
+}
+
+.player-O{
+    color:#31DE39;
+}
+
+.player-X{
+    color:#F7420C;
+}

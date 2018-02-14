@@ -33,10 +33,6 @@ $(document).ready(function(){
             }
         }
 
-        //reset();
-        
-    //validation goes here
-
     });
 
     $('#btn-reset').on('click', function(){
