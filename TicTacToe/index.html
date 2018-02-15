@@ -15,7 +15,7 @@
 
     <table>
         <tr ng-repeat="row in game.board">
-            <td ng-click="game.makeMove(game.board.indexOf(row),row.indexOf(s),'O')" 
+            <td ng-click="game.makePlayerMove(game.board.indexOf(row),row.indexOf(s),'O')" 
                 ng-repeat="s in row" 
                 ng-class="[{O: 'player-O',X: 'player-X'}[s.char],{false: 'notOccupied'}[s.isOccupied]]">
                 {{s.char}}
