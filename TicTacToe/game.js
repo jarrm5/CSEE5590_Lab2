@@ -131,8 +131,10 @@ function isGameOver(board){
     //tie game
     return null;
 }
-
+//Dumb opponent that fills horizontally
 function dumbOpponentMove(board){
+    //loop through each row looking for a spot to fill
+    //if the recursion returns true then the computer player made his move.
     for(var i = 0; i < board.length; i++){
         var result = fillHorizontal(board, i, 0);
         if(result){
@@ -142,14 +144,17 @@ function dumbOpponentMove(board){
     
 }
 
+//recursive function for the computer player to fill a spot on the board.
 function fillHorizontal(board,row,col){
+    //Out of bounds case
     if(board[row][col] == null){
         return false;
     }
-
+    //Square already occupied case
     if(board[row][col].isOccupied){
         return fillHorizontal(board,row, col+1);
     }
+    //Fill the Square
     else{
         board[row][col].token = Game.COMPUTER_TOKEN;
         board[row][col].isOccupied = true;
@@ -157,6 +162,7 @@ function fillHorizontal(board,row,col){
     }
 }
 
+//unbeatable opponent using minmax algorithm *not working atm*
 function smartOppenentMove(board){
 
     return minMax(board, 0, Game.COMPUTER_TOKEN)
