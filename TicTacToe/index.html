@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="main.css">
     <link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.min.js"></script>
-    <script src="game.js"></script>
+    <script src='https://cdn.jsdelivr.net/g/lodash@4(lodash.min.js+lodash.fp.min.js)'></script>    <script src="game.js"></script>
 </head>
 <body ng-controller="controller">
 
@@ -15,10 +15,10 @@
 
     <table>
         <tr ng-repeat="row in game.board">
-            <td ng-click="game.makePlayerMove(game.board.indexOf(row),row.indexOf(s),'O')" 
+            <td ng-click="game.makePlayerMove(game.board.indexOf(row),row.indexOf(s))" 
                 ng-repeat="s in row" 
-                ng-class="[{O: 'player-O',X: 'player-X'}[s.char],{false: 'notOccupied'}[s.isOccupied]]">
-                {{s.char}}
+                ng-class="[{O: 'player-O',X: 'player-X'}[s.token],{false: 'notOccupied'}[s.isOccupied]]">
+                {{s.token}}
             </td>
         </tr>
     </table>

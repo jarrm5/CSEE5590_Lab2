@@ -14,111 +14,224 @@ function Game(){
 
     this.TITLE = "TicTacToe Game";
     this.MESSAGE = Game.YOUR_TURN;
-    this.DIMENSION = 3;
-    this.board = makeBoard(this.DIMENSION);
-    this.inProgress = true;
+    this.board = makeBoard();
+    this.gameOver = false;
 
-    this.makePlayerMove = function(row,col,char){
+    this.makePlayerMove = function(row,col){
 
-        if(this.inProgress){
+        if(!this.gameOver){
             if(!this.board[row][col].isOccupied){
-                this.board[row][col].char = char;
+                this.board[row][col].token = Game.PLAYER_TOKEN;
                 this.board[row][col].isOccupied = true;
-                if(checkWinner(char,this.board)){
-                    this.inProgress = false;
+                
+                var result = isGameOver(this.board);
+    
+                if(result === Game.PLAYER_TOKEN){
                     this.MESSAGE = Game.YOU_WIN;
+                    this.gameOver = true;
+                    return;
+                }
+                else if(result == null){
+                    this.MESSAGE = Game.YOU_TIE;
+                    this.gameOver = true;
+                    return;
+                }
+                
+                /*
+                MinMax algorithm not working - stack can't accomodate recursive calls
+                var opponentMove = smartOppenentMove(this.board);
+                this.board[opponentMove[i]][opponentMove[j]] = Game.COMPUTER_TOKEN;
+                */
+
+                dumbOpponentMove(this.board);
+                //debugger;
+                
+                result = isGameOver(this.board);
+    
+                if(result === Game.COMPUTER_TOKEN){
+                    this.MESSAGE = Game.YOU_LOSE;
+                    this.gameOver = true;
+                    return;
+                }
+                else if(result == null){
+                    this.MESSAGE = Game.YOU_TIE;
+                    this.gameOver = true;
+                    return;
                 }
                 else{
-                    //makeOppenentMove();
                     this.MESSAGE = Game.YOUR_TURN;
                 }
-                
-                
+                    
             }
             else{
+                //Can't fill a square that is already occupied; try again
                 this.MESSAGE = Game.YOUR_ERROR;
             }
         }
-        
-        
-        
-        //debugger;
         
         return;
     }
 }
 
 function Square(){
-    this.char = "";
+    this.token = "";
     this.isOccupied = false;
 }
 
 
-function makeBoard(size){
+function makeBoard(){
     var board = [];
-    for(var i = 0; i < size;i++){
+    for(var i = 0; i < 3;i++){
         board.push([]);
-        for(var j = 0; j < size;j++)
+        for(var j = 0; j < 3;j++)
             board[i].push(new Square());
     }
     return board;
 }
 
-function checkWinner(player,board){
-    
-    
-    var test = getDiagonals(board);
-    debugger;
-    return evalBoard(board) || evalBoard(getColumns(board)) || evalBoard(getDiagonals(board));
+function isGameOver(board){
 
-    function evalBoard(a){
-        for(var i = 0; i < a.length; i++){
-            if(a[i].every(everyFunction)){
-                return true;
+    for(var i = 0; i < board.length; i++){
+        var player = board[i][0].token;
+        if(board[i][0].token === player && board[i][1].token === player && board[i][2].token === player && player !== ""){
+            //Someone won horizontally, return their token
+            return player;
+        }
+    }
+
+    for(var i = 0; i < board.length; i++){
+        var player = board[0][i].token;
+        if(board[0][i].token === player && board[1][i].token === player && board[2][i].token === player && player !== ""){
+            //Someone won vertically, return their token
+            return player;
+        }
+    }
+
+    var player = board[0][0].token;
+    if(board[0][0].token === player && board[1][1].token === player && board[2][2].token === player && player !== ""){
+        //Someone won diagonally, return their token
+        return player;
+    }
+
+    player = board[0][2].token;
+    if(board[0][2].token === player && board[1][1].token === player && board[2][0].token === player && player !== ""){
+        //Someone won diagonally, return their token
+        return player;
+    }
+
+    //Game is still live
+    for(var i = 0; i < board.length; i++){
+        for(var j = 0;j < board.length;j++){
+            if(!board[i][j].isOccupied){
+                return false;
             }
         }
+    }
+
+    //tie game
+    return null;
+}
+
+function dumbOpponentMove(board){
+    for(var i = 0; i < board.length; i++){
+        var result = fillHorizontal(board, i, 0);
+        if(result){
+            break;
+        }
+    }
+    
+}
+
+function fillHorizontal(board,row,col){
+    if(board[row][col] == null){
         return false;
     }
-    function getColumns(board){
-        var columnsArray = [];
-        for(var i=0; i < board.length; i++){
-            var col = [];
-            for(var j = 0; j < board.length; j++){
-                col.push(board[j][i]);
+
+    if(board[row][col].isOccupied){
+        return fillHorizontal(board,row, col+1);
+    }
+    else{
+        board[row][col].token = Game.COMPUTER_TOKEN;
+        board[row][col].isOccupied = true;
+        return true;
+    }
+}
+
+function smartOppenentMove(board){
+
+    return minMax(board, 0, Game.COMPUTER_TOKEN)
+
+}
+
+function minMax(newGrid,depth,token){
+        
+    var result = isGameOver(newGrid);
+
+    //No one has won yet
+    if(result === false){
+        //store the child nodes of the tree formed when computing depth of the outcomes
+        var children = [];
+
+        //Loop through all the potential moves the computer player could make
+        for(var i = 0; i < newGrid.length; i++){
+            for(var j = 0;j < newGrid.length;j++){
+                //need a copy of the grid each time we want to make a move
+                var gridCopy = _.cloneDeep(newGrid);
+                //Skip over the occupied spots
+                if(gridCopy[i][j].isOccupied){
+                    continue;
+                }
+                gridCopy[i][j] = token;
+                //recursive call to minMax to traverse to the next depth 
+                var child = minMax(gridCopy,depth + 1, (token === Game.PLAYER_TOKEN) ? Game.COMPUTER_TOKEN : Game.PLAYER_TOKEN );
+                children.push({
+                    cost: child,
+                    cell: {
+                        i:i,
+                        j:j
+                    }
+                });
+                
             }
-            columnsArray.push(col);
         }
-        var test = columnsArray;
-        return columnsArray;
-    }
-    function getDiagonals(board){
-        var diagonalsArray = [];
-        var diag = [];
-        for(var i = 0; i < board.length; i++){
-            diag.push(board[i][i]);
-        }
-        diagonalsArray.push(diag);
-        diag = [];
-        for(var i = board.length-1; i >= 0; i--){
-            diag.push(board[i][(board.length-1) - i]);
-        }
-        diagonalsArray.push(diag);
-        return diagonalsArray;
-    }
 
-    function everyFunction(p){
-        return player === p.char;
+        if(token === Game.COMPUTER_TOKEN){
+            var max = _.maxBy(children, (c) => {
+                return c.cost;
+            });
+            if(depth === 0){
+                return max.cell;
+            }
+            else{
+                return max.cost;
+            }
+        }
+        else{
+            var min = _.minBy(children, (c) => {
+                return c.cost;
+            });
+            if(depth === 0){
+                return min.cell;
+            }
+            else{
+                return min.cost;
+            }
+        }
+    }
+    //there is a tie
+    else if(result === null){
+        return 0;
+    }
+    else if(result === Game.PLAYER_TOKEN){
+        return depth - 10;
+    }
+    else if(result === Game.COMPUTER_TOKEN){
+        return 10 - depth;
     }
 }
 
-
-
-
-
-function makeOppenentMove(){
-
-}
-
+Game.PLAYER_TOKEN = 'O';
+Game.COMPUTER_TOKEN = 'X';
 Game.YOUR_TURN = "Pick an Empty Square.";
 Game.YOUR_ERROR = "This Square is already occupied. Try again.";
 Game.YOU_WIN = "You Win!"
