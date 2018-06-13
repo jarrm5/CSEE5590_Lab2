@@ -42,7 +42,7 @@
 
 <html>
     <head>
-        <title>BBC News App - Login</title>
+        <title>News App - Login</title>
     </head>
     
 
@@ -111,7 +111,7 @@
         
         <div class="container">
             <div class="title">
-                BBC News App
+                News App
             </div>
             <form id='form' method='POST' action='login.php'>
                 <div class="left">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>BBC News App</title>
+    <title>News App</title>
 
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -120,7 +120,7 @@
 <body>
     <div class="container">
         <div class="title">
-            BBC News App
+            News App
         </div>
         <div id="search-bar">
             <input placeholder='Search a news topic..' type="text" id="inp-topic">
